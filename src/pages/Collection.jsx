@@ -7,7 +7,7 @@ import ProductItem from '../components/ProductItem';
 
 const Collection = () => {
 
-  const {products} = useContext(ShopContext);
+  const {products, search, showSearch} = useContext(ShopContext);
   const [showFilter, setShowFilter] = useState(false);
   const [filteredProducts, setFilteredProducts] = React.useState(products);
   const [category, setCategory] = React.useState([]);
@@ -33,6 +33,10 @@ const Collection = () => {
 
   const applyFilters = ()=>{
     let updatedList = products;
+
+    if(showSearch && search){
+      updatedList = updatedList.filter(item => item.name.toLowerCase().includes(search.toLowerCase()))
+    }
 
     if(category.length > 0){
       updatedList = updatedList.filter((item)=> category.includes(item.category));
@@ -76,7 +80,7 @@ useEffect(() => {
 
   useEffect(()=>{
     applyFilters();
-  },[category, subCategories])
+  },[category, subCategories, search, showSearch])
 
   useEffect(()=>{
     setFilteredProducts(products);
